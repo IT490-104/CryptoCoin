@@ -43,4 +43,4 @@ if [ $? != 0 ]
 then
     apt install -y python3-pip
 else
-python3 --version
+    python3 --version
