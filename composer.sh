@@ -44,3 +44,4 @@ then
     apt install -y python3-pip
 else
     python3 --version
+fi
