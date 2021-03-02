@@ -37,7 +37,7 @@ else
     echo "Apache was already running..."
 fi
 #--------------Turn on Back End Scripts-----------------------
-python3 --version  | grep 'not found' > /dev/null 2>&1
+python3 --version  | grep 'Python' > /dev/null 2>&1
 
 if [ $? != 0 ]
 then
