@@ -1,3 +1,3 @@
 # CryptoCoin
 
-![alt text](https://drive.google.com/file/d/1Vu3AUDE5VM3sYBZYL61a2GHBTjgKCN5Q/view?usp=sharing)
+![unknown](https://user-images.githubusercontent.com/35750752/111403550-255f7d80-869b-11eb-9bbb-6b351b661c02.png)
