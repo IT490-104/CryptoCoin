@@ -1,1 +1,49 @@
-test
+?php include('session.php') ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IT490</title>
+  <link rel="stylesheet" type="text/css" href="style.css? <?php echo time(); ?>" />     
+</head>
+<body>
+  <div class="header">
+        <h1>Welcome To Cryptocoin </h1>
+        <h2>Login </h2>
+  </div>
+
+  <form method="post" action="home.html">
+        <?php include('errors.php'); ?>
+        <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username" >
+        </div>
+        <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password">
+        </div>
+        <div class="input-group">
+                <button type="submit" class="btn" name="login">Login</button>
+        </div>
+        <p>
+                Not yet a member? <a href="register.php">Sign up</a>
+
+<!-- <?php  
+
+$username = ['Username'];
+$password = ['Password'];
+    
+    if ($_POST['submit']) {
+
+        if ($username != '' && $password != ''); {
+                echo "Successfully registered!!";
+        } else {
+                echo "Already a member";
+        }
+     }
+ ?>
+-- >
+        </p>
+  </form>
+</body>
+</html>
