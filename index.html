@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IT490</title>
+  <link rel="stylesheet" type="text/css" href="style.css? <?php echo time(); ?>" />
+</head>
+<body>
+  <div class="header">
+      <h1>Welcome To Cryptocoin </h1>
+    <h2>Login </h2>
+  </div>
+
+<!--  <form method="POST" action="home.html"> --> 
+
+    <form method="POST" action="connection.php">
+ 
+     <?php include('errors.php'); ?>
+     <input type="hidden" value="login" name="option"><!--e-->
+      <div class="input-group">
+          <label>Username</label>
+          <input type="text" name="username" >
+      </div>
+      <div class="input-group">
+          <label>Password</label>
+          <input type="password" name="password">
+      </div>
+      <div class="input-group">
+          <button type="submit" >Login</button>
+      </div>
+      <p>
+          Not yet a member? <a href="register.php">Sign up</a>
+    </p>
+</form>
+</body>
+</html>
