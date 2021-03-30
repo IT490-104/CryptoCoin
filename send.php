@@ -35,7 +35,7 @@ $channel->queue_declare('request', false, false, false, false);
 $msg = new AMQPMessage($message);
 $channel->basic_publish($msg, '', 'request');
 
-echo "Message was sent!";
+//echo "Message was sent!";
 
 $channel->close();
 $connection->close();

@@ -9,20 +9,17 @@
       <h1>Welcome To Cryptocoin </h1>
     <h2>Login </h2>
   </div>
-
-<!--  <form method="POST" action="home.html"> --> 
-
     <form method="POST" action="connection.php">
- 
-     <?php include('errors.php'); ?>
-     <input type="hidden" value="login" name="option"><!--e-->
+   <!--  <?php include('errors.php'); ?> -->
+
+     <input required type="hidden" value="login" name="option"autocomplete="off" >
       <div class="input-group">
           <label>Username</label>
-          <input type="text" name="username" >
+          <input required type="text" name="username" autocomplete="off" >
       </div>
       <div class="input-group">
           <label>Password</label>
-          <input type="password" name="password">
+          <input required type="password" name="password" autocomplete="new-password">
       </div>
       <div class="input-group">
           <button type="submit" >Login</button>
@@ -30,6 +27,7 @@
       <p>
           Not yet a member? <a href="register.php">Sign up</a>
     </p>
+
 </form>
 </body>
 </html>

@@ -9,11 +9,29 @@ $channel = $connection->channel();
 
 $channel->queue_declare('back2front', false, false, false, false);
 
-echo " [*] Waiting for messages. To exit press CTRL+C\n";
-
+$msg;
 $callback = function ($msg) {
-    echo ' [x] Received ', $msg->body, "\n";
+
+$expand = $msg->body;
+
+if($expand=='loginSuccess'){
+ header ("Location: home.html");
+}
+
+if($expand=='loginFailed'){
+echo  'Login failed, please try again';
+}
+
+if($expand=='regSuccess'){
+header ("Location: index.html");
+}
+
+if($expand=='regFailed'){
+echo 'Registeration failed, please try again';
+}
+
 };
+
 
 $channel->basic_consume('back2front', '', false, true, false, false, $callback);
 
