@@ -27,13 +27,18 @@ if($password_1 != $password_2){
 // $message = $username. "!" . $password_1 .  "!" . $password_2 .  "!" . $option;
 }
 
-$connection = new AMQPStreamConnection('192.168.192.147', 5672, 'username', 'password');
+$connection = AMQPStreamConnection::create_connection([
+	['host' => '192.168.192.147', 'port' => '5672', 'user' => 'username', 'password' => 'password', 'vhost' => '/'],
+	['host' => '192.168.192.147', 'port' => '5673', 'user' => 'username', 'password' => 'password', 'vhost' => '/'],
+	['host' => '192.168.192.147', 'port' => '5674', 'user' => 'username', 'password' => 'password', 'vhost' => '/']
+]);
+
 $channel = $connection->channel();
 
-$channel->queue_declare('request', false, false, false, false);
+$channel->queue_declare('ha.request', false, false, false, false);
 
 $msg = new AMQPMessage($message);
-$channel->basic_publish($msg, '', 'request');
+$channel->basic_publish($msg, '', 'ha.request');
 
 //echo "Message was sent!";
 
