@@ -5,11 +5,16 @@ require_once __DIR__ . '/vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 //Connects to rabbitMQ
-$connection = new AMQPStreamConnection('192.168.192.147', 5672, 'username', 'password');
+$connection = AMQPStreamConnection::create_connection([
+	['host'=>'192.168.192.147','port'=>'5672','user'=>'username','password'=>'password','vhost'=>'/'],
+	['host'=>'192.168.192.147','port'=>'5673','user'=>'username','password'=>'password','vhost'=>'/'],
+	['host'=>'192.168.192.147','port'=>'5674','user'=>'username','password'=>'password','vhost'=>'/']
+]);
+
 $channel = $connection->channel();
 
 //Recieve queue named 'request' from the frontend
-$channel->queue_declare('request', false, false, false, false);
+$channel->queue_declare('ha.request', false, false, false, false);
 
 echo " [*] Waiting for messages. To exit press CTRL+C\n";
 $msg;
@@ -26,9 +31,14 @@ $callback = function ($msg) {
 	//array 1 = password
 	//array 2 = option
 
-	$connection = new AMQPStreamConnection('192.168.192.147', 5672, 'username', 'password');
+	$connection = AMQPStreamConnection::create_connection([
+        		['host' => '192.168.192.147', 'port' => '5672', 'user' => 'username', 'password' => 'password', 'vhost' => '/'],
+        		['host' => '192.168.192.147', 'port' => '5673', 'user' => 'username', 'password' => 'password', 'vhost' => '/'],
+        		['host' => '192.168.192.147', 'port' => '5674', 'user' => 'username', 'password' => 'password', 'vhost' => '/']  
+        ]);
+
 	$channel = $connection->channel();
-	$channel->queue_declare('result', false, false, false, false);
+	$channel->queue_declare('ha.result', false, false, false, false);
 
         echo"Step 3 " . "\n";
 	if($array[2]=="register"){ //If frontend message type is register
@@ -53,27 +63,37 @@ $callback = function ($msg) {
                  //If shortcut != $array[0]
                 if ($shortcut == ''){
 			echo "Inserted statement";
-			$connection = new AMQPStreamConnection('192.168.192.147', 5672, 'username', 'password');
+
+			$connection = AMQPStreamConnection::create_connection([
+                        	['host' => '192.168.192.147', 'port' => '5672', 'user' => 'username', 'password' => 'password', 'vhost' => '/'],
+                        	['host' => '192.168.192.147', 'port' => '5673', 'user' => 'username', 'password' => 'password', 'vhost' => '/'],
+                        	['host' => '192.168.192.147', 'port' => '5674', 'user' => 'username', 'password' => 'password', 'vhost' => '/']  
+			]);
+
 			$channel = $connection->channel();
-			$channel->queue_declare('hello', false, false, false, false);
+			$channel->queue_declare('ha.hello', false, false, false, false);
 
 			$queri = ("INSERT INTO UserRecords (username,password) VALUES ('$array[0]','$array[1]')");
 			$msg = new AMQPMessage($queri);
 			//Sends queue to DB through the rabbitmq
-			$channel->basic_publish($msg, '', 'hello');
+			$channel->basic_publish($msg, '', 'ha.hello');
                 }
                 else{ //Else print
 
                 echo "Username in the DB";
 
+			$connection = AMQPStreamConnection::create_connection([
+                                ['host' => '192.168.192.147', 'port' => '5672', 'user' => 'username', 'password' => 'password', 'vhost' => '/'],
+                                ['host' => '192.168.192.147', 'port' => '5673', 'user' => 'username', 'password' => 'password', 'vhost' => '/'],
+                                ['host' => '192.168.192.147', 'port' => '5674', 'user' => 'username', 'password' => 'password', 'vhost' => '/']
+                        ]);
 
-			$connection = new AMQPStreamConnection('192.168.192.147', 5672, 'username', 'password');
 			$channel = $connection->channel();
-			$channel->queue_declare('back2front', false, false, false, false);
+			$channel->queue_declare('ha.back2front', false, false, false, false);
 			$queri = ("regFailed");
 			$msg = new AMQPMessage($queri);
 			//Sends queue to DB through the rabbitmq
-			$channel->basic_publish($msg, '', 'back2front');
+			$channel->basic_publish($msg, '', 'ha.back2front');
 
 
 		}
@@ -81,7 +101,7 @@ $callback = function ($msg) {
 	else{ //If frontend message type is login
 		$queri = ("SELECT * FROM UserRecords WHERE username='$array[0]' and password='$array[1]'");
 		$msg = new AMQPMessage($queri);
-		$channel->basic_publish($msg, '', 'hello');
+		$channel->basic_publish($msg, '', 'ha.hello');
 	}
 
 	$channel->close();
@@ -89,7 +109,7 @@ $callback = function ($msg) {
 };
 
 
-$channel->basic_consume('request', '', false, true, false, false, $callback);
+$channel->basic_consume('ha.request', '', false, true, false, false, $callback);
 
 while ($channel->is_consuming()) {
     $channel->wait();
